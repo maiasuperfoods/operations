@@ -1,7 +1,3 @@
-# Business data. The page reads public/data/db.json at run time.
-# Do not commit it while this repository is public.
-public/data/*.json
-
 __pycache__/
 *.pyc
 .DS_Store

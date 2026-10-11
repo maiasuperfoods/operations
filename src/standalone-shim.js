@@ -27,7 +27,7 @@
     n.style.cssText = 'padding:8px 16px;font-size:13px;line-height:1.4;background:var(--warn-wash);color:var(--warn-text);border-bottom:1px solid var(--line)';
     n.textContent = ok
       ? 'Read-only copy' + (exportedAt ? ', data exported ' + exportedAt : '') + '. Tasks, targets and counts are edited on the Claude page.'
-      : 'No data file found. This build reads public/data/db.json, which is not part of the repository. See the README.';
+      : 'No data file found. This build reads public/data/db.json. See the README.';
     document.body.insertBefore(n, document.body.firstChild);
   }
   load.then(function(ok){ if(document.body) banner(ok); else document.addEventListener('DOMContentLoaded', function(){ banner(ok); }); });

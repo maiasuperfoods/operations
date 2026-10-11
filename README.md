@@ -13,36 +13,35 @@ Vercel serves `public/` as-is. There is no build step on Vercel.
 | `scripts/build_page.py` | Wraps the source in a normal HTML document, adds the shim, and writes `public/index.html`. |
 | `scripts/build_snapshot.py` | Turns an export of the page database into `public/data/db.json`. |
 | `public/index.html` | The built page. Commit it after every build; this is what Vercel serves. |
+| `public/data/db.json` | The data snapshot the page displays. |
 | `docs/data-model.md` | The collections and documents the page reads. |
 
-**No business data is in this repository.** The page reads `public/data/db.json` at run time, and that file is git-ignored.
+**This repository is public and the snapshot is committed to it by choice.** `public/data/db.json` holds revenue, the cash plan, supplier payments and per-person numbers, and anyone can read it here and at the Vercel URL.
 
 ## Deploy on Vercel (one time)
 
 1. Vercel → **Add New → Project → Import** this repository.
 2. Framework Preset: **Other**. Leave Build Command empty. The output directory (`public`) comes from `vercel.json`.
-3. Turn on **Settings → Deployment Protection** before any data is added. The page shows revenue, cash and people's numbers.
+3. Optional: **Settings → Deployment Protection** limits who can open the site. It does not hide the file in this repository.
 
 Every push to `main` redeploys.
 
 ## Data
 
-Without `public/data/db.json` the deployed page loads and says that no data file was found.
-
-The snapshot holds revenue, cash, supplier payments and per-person numbers, so it must not be committed while this repository is public. Two ways to give the site its data:
-
-- **Make the repository private**, remove the `public/data/*.json` line from `.gitignore`, and commit the snapshot. Each new export then redeploys the site.
-- **Keep the repository public** and store the data somewhere private that the page can read after sign-in. That needs a small API and a login in front of it, which this version does not have.
-
-To build a snapshot from an export of the page database (one folder per collection, one JSON file per document):
+The page reads `public/data/db.json` at run time and shows the date of that snapshot in a banner at the top. To replace it with a newer export of the page database (one folder per collection, one JSON file per document):
 
 ```bash
 python3 scripts/build_snapshot.py path/to/export 2026-10-11
+git add public/data/db.json && git commit -m "Refresh data" && git push
 ```
+
+Every push redeploys the site with the new numbers. Git keeps every earlier snapshot in the history.
+
+To stop publishing the data, make the repository private (GitHub → Settings → Change visibility). Anything already pushed while it was public may have been copied.
 
 ## Read-only by design
 
-On Vercel the page is a read-only copy. Tasks, targets, owner notes, stock counts and cash balances are edited on the Claude page, where they save to its shared database. A banner at the top of the Vercel page shows the date of the snapshot it is displaying.
+On Vercel the page is a read-only copy. Tasks, targets, owner notes, stock counts and cash balances are edited on the Claude page, where they save to its shared database, and reach this copy with the next snapshot.
 
 ## Changing the page
 

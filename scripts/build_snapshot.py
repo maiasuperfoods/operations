@@ -6,7 +6,7 @@ The export is a folder with one sub-folder per collection and one JSON file per 
 
 usage: python3 scripts/build_snapshot.py <export folder> [YYYY-MM-DD]
 
-The snapshot holds business data. Keep it out of a public repository (see .gitignore).
+The snapshot holds business data and is committed to this repository on purpose (see README).
 """
 import sys, os, json, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
